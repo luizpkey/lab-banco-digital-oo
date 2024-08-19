@@ -1,18 +1,41 @@
+import exceptions.MonetaryValueInvalidException;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Cliente venilton = new Cliente();
-		venilton.setNome("Venilton");
-		
-		Conta cc = new ContaCorrente(venilton);
-		Conta poupanca = new ContaPoupanca(venilton);
 
-		cc.depositar(100);
-		cc.transferir(100, poupanca);
-		
-		cc.imprimirExtrato();
-		poupanca.imprimirExtrato();
+		Banco banco = new Banco("Dio Bank");
+		Cliente baltazar = new Cliente();
+		baltazar.setNome("Baltazar");
+		Conta contaCorrente;
+
+		contaCorrente = banco.addConta(baltazar, TipoConta.CORRENTE);
+		Conta contaPoupanca;
+		contaPoupanca = banco.addConta(baltazar, TipoConta.POUPANCA);
+
+		try {
+
+			contaCorrente.depositar(100);
+			contaCorrente.transferir(100, contaPoupanca);
+
+			contaCorrente.imprimirExtrato();
+			contaPoupanca.imprimirExtrato();
+
+			contaCorrente.transferir(100, contaPoupanca);
+			contaCorrente.depositar(100);
+
+			contaCorrente.imprimirExtrato();
+			contaPoupanca.imprimirExtrato();
+
+			contaCorrente.depositar(-100);
+			contaCorrente.transferir(100, contaPoupanca);
+
+			contaCorrente.imprimirExtrato();
+			contaPoupanca.imprimirExtrato();
+    	} catch (MonetaryValueInvalidException e) {
+			e.toString();
+			System.out.println(e.getMessage());
+		}
 	}
 
 }
